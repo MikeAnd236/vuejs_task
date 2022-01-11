@@ -10,7 +10,7 @@
     <menu-render></menu-render>
     <div id="render">
       <h2>Trailer Management</h2>
-      <add-new></add-new>
+      <app-header></app-header>
       <router-view></router-view>
     </div>
   </div>
@@ -18,14 +18,12 @@
 
 <script>
 import menuRender from "./components/menuRender.vue";
-
-import addNew from "./components/addNew.vue";
+import header from "./components/header.vue"
 
 export default {
   components: {
     "menu-render": menuRender,
-
-    "add-new": addNew,
+    "app-header": header,
   },
 };
 </script>
@@ -37,27 +35,26 @@ export default {
   box-sizing: border-box;
   display: flex;
   justify-content: space-evenly;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 #render {
   display: flex;
   flex-direction: column;
   border: 0.5px solid #cecece;
   box-shadow: 2px 2px 2px #888888;
-  margin-right: -100px ;
+  margin-right: -100px;
   margin-left: -100px;
   width: 900px;
 }
-h2{
+h2 {
   background-color: rgb(12, 119, 185);
   padding-left: 60px;
   color: white;
-  padding-top: 5px ;
+  padding-top: 5px;
   padding-bottom: 5px;
   margin-top: -20px;
   margin-left: -80px;
   margin-right: -60px;
   font-size: 18px;
 }
-
 </style>

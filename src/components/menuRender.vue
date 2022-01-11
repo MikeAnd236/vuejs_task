@@ -15,7 +15,8 @@
     <p>Administration</p>
     <ul>
       <li>
-        <i id="menu-icon" class="fas fa-draw-polygon fa-lg"></i> Zoning Management
+        <i id="menu-icon" class="fas fa-draw-polygon fa-lg"></i> Zoning
+        Management
       </li>
     </ul>
   </div>
@@ -57,7 +58,6 @@ export default {
   margin-left: -150px;
   line-height: 0.2;
   font-size: 12px;
-  
 }
 ul {
   list-style-type: none;

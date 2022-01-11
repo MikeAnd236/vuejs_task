@@ -59,7 +59,7 @@ export default {
         )
         .then(function (data) {
           console.log(data);
-          this.$router.push('/')
+          this.$router.push("/");
         });
     },
   },
@@ -67,5 +67,4 @@ export default {
 </script>
 
 <style lang="scss">
-
 </style>

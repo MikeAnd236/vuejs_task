@@ -1,9 +1,6 @@
 <template>
   <div id="add-new">
-    <button id="add" @click="submitted = !submitted" v-show="submitted">
-      <router-link to="/add">ADD</router-link>
-    </button>
-    <form v-if="!submitted">
+    <form v-if="submitted">
       <h3>Add a New Item</h3>
       <label>Trailer No.:</label>
       <input type="text" v-model="data.trailerNo" />
@@ -18,7 +15,7 @@
       <label>Attached Vehicle:</label>
       <input type="text" v-model="data.attachedVehicle" />
       <button class="click" @click.prevent="post">Add</button>
-      <button class="click" @click="submitted = !submitted">
+      <button class="click">
         <router-link to="/">Cancel</router-link>
       </button>
     </form>
@@ -100,14 +97,15 @@ button {
   background-color: rgb(12, 119, 185);
   border-radius: 3px;
   width: 60px;
-  margin-top: 10px;
+  height: 30px;
+  margin-top: 5px;
 }
 
 .click {
   color: white;
   font-size: 12px;
 }
-.click:hover{
+.click:hover {
   background-color: orange;
 }
 
