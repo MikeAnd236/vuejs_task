@@ -1,7 +1,7 @@
 <template>
   <div>
     <form @submit="editItem">
-      <h2>Edit Item</h2>
+      <h3>Edit Item</h3>
       <label>Trailer No.:</label>
       <input type="text" v-model="data.trailerNo" />
       <label>Company:</label>

@@ -1,6 +1,5 @@
 <template>
   <div id="table-render">
-    
     <table>
       <thead>
         <tr>
@@ -100,6 +99,7 @@ export default {
 }
 table {
   border-collapse: collapse;
+  width: 100%;
   th {
     padding-bottom: 10px;
     text-align: left;
@@ -117,7 +117,13 @@ table {
       background-color: Transparent;
       background-repeat: no-repeat;
       border: none;
+      width: 20px;
+      height: 20px;
     }
   }
 }
+#action {
+  text-align: center;
+}
+
 </style>

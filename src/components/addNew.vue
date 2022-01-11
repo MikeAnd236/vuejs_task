@@ -4,7 +4,7 @@
       <router-link to="/add">ADD</router-link>
     </button>
     <form v-if="!submitted">
-      <h2>Add a New Item</h2>
+      <h3>Add a New Item</h3>
       <label>Trailer No.:</label>
       <input type="text" v-model="data.trailerNo" />
       <label>Company:</label>
@@ -69,18 +69,26 @@ div {
   display: flex;
   margin-top: 10px;
   font-size: 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
-
 #add {
-  background-color: lightblue;
+  background-color: rgb(12, 119, 185);
   color: rgb(255, 255, 255);
-  border: 1px solid blue;
+  border: 1px solid rgb(12, 119, 185);
   margin-left: 10px;
+  border-radius: 3px;
+  padding: 5px 15px;
 }
-
 #add:hover {
-  background-color: sandybrown;
+  background-color: orange;
+}
+a {
+  text-decoration: none;
+  color: white;
+  font-size: 12px;
+}
+i {
+  color: black;
 }
 form {
   display: flex;
@@ -88,8 +96,25 @@ form {
   width: 300px;
   padding: 20px;
 }
-.click {
-  margin-top: 10px;
+button {
+  background-color: rgb(12, 119, 185);
+  border-radius: 3px;
   width: 60px;
+  margin-top: 10px;
+}
+
+.click {
+  color: white;
+  font-size: 12px;
+}
+.click:hover{
+  background-color: orange;
+}
+
+h3 {
+  font-size: 18px;
+}
+label {
+  font-size: 14px;
 }
 </style>

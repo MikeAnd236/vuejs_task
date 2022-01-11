@@ -44,13 +44,20 @@ export default {
   flex-direction: column;
   border: 0.5px solid #cecece;
   box-shadow: 2px 2px 2px #888888;
+  margin-right: -100px ;
+  margin-left: -100px;
+  width: 900px;
 }
 h2{
-  background-color: blue;
-  padding-left: 20px;
+  background-color: rgb(12, 119, 185);
+  padding-left: 60px;
   color: white;
   padding-top: 5px ;
   padding-bottom: 5px;
+  margin-top: -20px;
+  margin-left: -80px;
+  margin-right: -60px;
+  font-size: 18px;
 }
 
 </style>
