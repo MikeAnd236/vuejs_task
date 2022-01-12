@@ -1,5 +1,8 @@
 <template>
   <div id="table-render">
+    <div>
+      <app-header></app-header>
+    </div>
     <table>
       <thead>
         <tr>
@@ -14,7 +17,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in data" :key="item.id">
-          <td>
+          <td id="icon">
             <button>
               <router-link v-bind:to="'/edit/' + item.id" exact>
                 <span v-html="item.action[0]"></span>
@@ -48,11 +51,15 @@
 </template>
 
 <script>
+import header from "./header.vue";
 export default {
   data() {
     return {
       data: [],
     };
+  },
+  components: {
+    "app-header": header,
   },
 
   mounted() {
@@ -96,6 +103,9 @@ export default {
 <style lang="scss">
 #table-render {
   box-sizing: border-box;
+  margin-top: -10px;
+  display: flex;
+  flex-direction: column;
 }
 table {
   border-collapse: collapse;
@@ -124,5 +134,12 @@ table {
 }
 #action {
   text-align: center;
+}
+#icon {
+  text-align: center;
+}
+#header {
+  margin-top: -10px;
+  margin-bottom: 20px;
 }
 </style>

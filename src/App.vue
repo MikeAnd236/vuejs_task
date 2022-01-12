@@ -8,9 +8,9 @@
     />
 
     <menu-render></menu-render>
+
     <div id="render">
       <h2>Trailer Management</h2>
-      <app-header></app-header>
       <router-view></router-view>
     </div>
   </div>
@@ -18,12 +18,11 @@
 
 <script>
 import menuRender from "./components/menuRender.vue";
-import header from "./components/header.vue"
+
 
 export default {
   components: {
     "menu-render": menuRender,
-    "app-header": header,
   },
 };
 </script>
