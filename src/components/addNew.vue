@@ -1,20 +1,42 @@
 <template>
   <div id="add-new">
-    <form v-if="submitted">
+    <form v-if="submitted" @submit="post">
       <h3>Add a New Item</h3>
       <label>Trailer No.:</label>
-      <input type="text" v-model="data.trailerNo" />
+      <input type="text" v-model="data.trailerNo" readonly />
       <label>Company:</label>
-      <input type="text" v-model="data.company" />
-      <label>Status:</label>
-      <input type="text" v-model="data.status" />
+      <input
+        type="text"
+        v-model="data.company"
+        :maxlength="100"
+        minlength="10"
+        pattern="[a-zA-Z0-9]+"
+        title="Cannot contain specific letter"
+        required
+      />
+      <label>Status</label>
+      <select v-model="data.status">
+        <option v-for="state in status" :key="state.id">{{ state }}</option>
+      </select>
       <label>Location:</label>
-      <input type="text" v-model="data.location" />
+      <input
+        type="text"
+        v-model="data.location"
+        pattern="[a-zA-Z0-9]+"
+        title="Cannot contain specific letter"
+        required
+      />
       <label>Job</label>
-      <input type="text" v-model="data.job" />
+      <select v-model="data.job" required>
+        <option v-for="jo in job" :key="jo.id">{{ jo }}</option>
+      </select>
       <label>Attached Vehicle:</label>
-      <input type="text" v-model="data.attachedVehicle" />
-      <button class="click" @click.prevent="post">Add</button>
+      <input type="text" v-model="data.attachedVehicle" required />
+      <!--<button class="click" @click.prevent="post" name="submit" >
+        Add
+      </button>-->
+      <input class="click" type="submit" value="Add" />
+
       <button class="click">
         <router-link to="/">Cancel</router-link>
       </button>
@@ -26,19 +48,39 @@
 export default {
   data() {
     return {
+      errors: [],
       submitted: true,
       data: {
         action: ["<i class='fas fa-pen'></i>", "<i class='fas fa-trash'></i>"],
-        trailerNo: "",
+        trailerNo: this.randomTrailer(6),
         company: "",
-        status: "",
         location: "",
-        job: "",
         attachedVehicle: "",
       },
+      status: [
+        "Allocation",
+        "Unallocation",
+        "Under repair",
+        "Not for Allocation",
+        "Not Servicable",
+      ],
+      job: ["soldier", "driver", "doctor", "teacher"],
     };
   },
+
   methods: {
+    randomTrailer: function (length) {
+      var result = "";
+      var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return "CDAS-" + result;
+    },
+
     post: function () {
       this.$http
         .post("https://61d3f493b4c10c001712bb63.mockapi.io/data", this.data)
@@ -96,14 +138,16 @@ form {
 button {
   background-color: rgb(12, 119, 185);
   border-radius: 3px;
-  width: 60px;
-  height: 30px;
-  margin-top: 5px;
 }
-
 .click {
   color: white;
   font-size: 12px;
+  width: 60px;
+  height: 30px;
+  margin-top: 5px;
+  cursor: pointer;
+  background-color: rgb(12, 119, 185);
+  border-radius: 3px;
 }
 .click:hover {
   background-color: orange;
