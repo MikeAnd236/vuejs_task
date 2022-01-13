@@ -1,5 +1,7 @@
 <template>
-  <div id="add-new">
+<div>
+  <spinner class="spinner" v-if="load"></spinner>
+  <div id="add-new" v-if="!load">
     <form v-if="submitted" @submit="post">
       <h3>Add a New Item</h3>
       <label>Trailer No.:</label>
@@ -10,19 +12,19 @@
         v-model="data.company"
         :maxlength="100"
         minlength="10"
-        pattern="[a-zA-Z0-9]+"
+        pattern="[a-zA-Z0-9\s]+"
         title="Cannot contain specific letter"
         required
       />
       <label>Status</label>
-      <select v-model="data.status">
+      <select v-model="data.status" required>
         <option v-for="state in status" :key="state.id">{{ state }}</option>
       </select>
       <label>Location:</label>
       <input
         type="text"
         v-model="data.location"
-        pattern="[a-zA-Z0-9]+"
+        pattern="[a-zA-Z0-9\s]+"
         title="Cannot contain specific letter"
         required
       />
@@ -31,10 +33,19 @@
         <option v-for="jo in job" :key="jo.id">{{ jo }}</option>
       </select>
       <label>Attached Vehicle:</label>
-      <input type="text" v-model="data.attachedVehicle" required />
-      <!--<button class="click" @click.prevent="post" name="submit" >
-        Add
-      </button>-->
+      <input
+        type="text"
+        v-model="data.attachedVehicle"
+        placeholder="search"
+        @keyup="inputChanged"
+        @keydown.down="onArrowDown"
+        pattern="[A-Z0-9]+"
+        title="Please enter Captitalize letter"
+        required
+      />
+      <ul v-for="user in filteredUser" :key="user.id" v-show="isOpen">
+        <li @click="setResult(user.value)">{{ user.value }}</li>
+      </ul>
       <input class="click" type="submit" value="Add" />
 
       <button class="click">
@@ -42,13 +53,15 @@
       </button>
     </form>
   </div>
+</div>
+  
 </template>
 
 <script>
+import spinner from "./spinner.vue";
 export default {
   data() {
     return {
-      errors: [],
       submitted: true,
       data: {
         action: ["<i class='fas fa-pen'></i>", "<i class='fas fa-trash'></i>"],
@@ -65,6 +78,51 @@ export default {
         "Not Servicable",
       ],
       job: ["soldier", "driver", "doctor", "teacher"],
+      users: [
+        {
+          id: "l1",
+          value: "AB024",
+        },
+        {
+          id: "l2",
+          value: "QT163",
+        },
+        {
+          id: "l3",
+          value: "GV220",
+        },
+        {
+          id: "l4",
+          value: "TH120",
+        },
+        {
+          id: "l5",
+          value: "KM089",
+        },
+        {
+          id: "l6",
+          value: "DR058",
+        },
+        {
+          id: "l7",
+          value: "GV110",
+        },
+        {
+          id: "l8",
+          value: "DW098",
+        },
+        {
+          id: "l9",
+          value: "AC148",
+        },
+        {
+          id: "l10",
+          value: "GR233",
+        },
+      ],
+      isOpen: false,
+      filteredUser: [],
+      load: false,
     };
   },
 
@@ -80,13 +138,42 @@ export default {
       }
       return "CDAS-" + result;
     },
-
+    /*autoComplete: function () {
+      this.$http
+        .get("https://61d3f493b4c10c001712bb63.mockapi.io/licenses")
+        .then(function (data) {
+          this.results = data.body;
+          console.log(this.results);
+        });
+    },*/
+    setResult(value) {
+      this.data.attachedVehicle = value;
+      this.isOpen = false;
+    },
+    inputChanged() {
+      if (this.data.attachedVehicle === "") {
+        this.isOpen = false;
+      } else {
+        let filtered = this.users.filter((user) => {
+          return user.value.match(this.data.attachedVehicle);
+        });
+        this.filteredUser = [];
+        this.isOpen = true;
+        this.filteredUser.push(...filtered);
+        return this.filteredUser;
+      }
+    },
     post: function () {
       this.$http
-        .post("https://61d3f493b4c10c001712bb63.mockapi.io/data", this.data)
+        .post("https://61d3f493b4c10c001712bb63.mockapi.io/data", this.data, {
+          before: () => {
+            this.load = true;
+          },
+        })
         .then(function (data) {
           console.log(data);
           this.submitted = true;
+          this.load = false;
           this.$router.push({ path: "/" }).catch((error) => {
             if (
               error.name !== "NavigationDuplicated" &&
@@ -99,6 +186,9 @@ export default {
           });
         });
     },
+  },
+  components: {
+    spinner: spinner,
   },
 };
 </script>
@@ -158,5 +248,11 @@ h3 {
 }
 label {
   font-size: 14px;
+}
+li {
+  font-size: 12px;
+}
+.spinner{
+  margin-left: 425px;
 }
 </style>

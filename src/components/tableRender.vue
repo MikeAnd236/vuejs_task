@@ -1,65 +1,72 @@
 <template>
-  <div id="table-render">
-    <div>
-      <app-header></app-header>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th id="action">Action</th>
-          <th>Trailer No.</th>
-          <th>Company</th>
-          <th>Status</th>
-          <th>Location</th>
-          <th>Job</th>
-          <th>Attached Vehicle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(item, index) in data" :key="item.id">
-          <td id="icon">
-            <button>
-              <router-link v-bind:to="'/edit/' + item.id" exact>
-                <span v-html="item.action[0]"></span>
-              </router-link>
-            </button>
+  <div id="table-content">
+    <spinner class="spinner" v-if="load"></spinner>
+    <div id="table-render" v-if="!load">
+      <div >
+        <app-header></app-header>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th id="action">Action</th>
+            <th>Trailer No.</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Location</th>
+            <th>Job</th>
+            <th>Attached Vehicle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in data" :key="item.id">
+            <td id="icon">
+              <button>
+                <router-link v-bind:to="'/edit/' + item.id" exact>
+                  <span v-html="item.action[0]"></span>
+                </router-link>
+              </button>
 
-            <button @click="deleteItem(index)">
-              <span v-html="item.action[1]"></span>
-            </button>
-          </td>
-          <td>
-            {{ item.trailerNo }}
-          </td>
-          <td>
-            {{ item.company }}
-          </td>
-          <td>
-            {{ item.status }}
-          </td>
-          <td>{{ item.location }}</td>
-          <td>
-            {{ item.job }}
-          </td>
-          <td>
-            {{ item.attachedVehicle }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              <button @click="deleteItem(index)">
+                <span v-html="item.action[1]"></span>
+              </button>
+            </td>
+            <td>
+              {{ item.trailerNo }}
+            </td>
+            <td>
+              {{ item.company }}
+            </td>
+            <td>
+              {{ item.status }}
+            </td>
+            <td>{{ item.location }}</td>
+            <td>
+              {{ item.job }}
+            </td>
+            <td>
+              {{ item.attachedVehicle }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <script>
 import header from "./header.vue";
+import spinner from "./spinner.vue";
+
 export default {
   data() {
     return {
       data: [],
+      load: false,
     };
   },
   components: {
     "app-header": header,
+    spinner: spinner,
   },
 
   mounted() {
@@ -73,11 +80,16 @@ export default {
         .then(function (data) {
           let id = data.body[index]["id"];
           this.$http
-            .delete("https://61d3f493b4c10c001712bb63.mockapi.io/data/" + id)
+            .delete("https://61d3f493b4c10c001712bb63.mockapi.io/data/" + id, {
+              before: () => {
+                this.load = true;
+              },
+            })
             .then(function (data) {
               console.log("data:" + data, "id:" + id);
               this.data.splice(id, 1);
               this.syncData();
+              this.load = false;
             });
         })
         .catch(function (e) {
@@ -92,7 +104,7 @@ export default {
         .then(function (data) {
           console.log("update data: ", data);
           this.data = data.body;
-          console.log("loadedddd...........");
+          //console.log("loadedddd...........");
         })
         .catch((err) => console.log(err));
     },
@@ -101,6 +113,10 @@ export default {
 </script>
 
 <style lang="scss">
+#table-content{
+  display: flex;
+  flex-direction: column;
+}
 #table-render {
   box-sizing: border-box;
   margin-top: -10px;
@@ -129,6 +145,7 @@ table {
       border: none;
       width: 20px;
       height: 20px;
+      cursor: pointer;
     }
   }
 }

@@ -12,17 +12,19 @@
     <div id="render">
       <h2>Trailer Management</h2>
       <router-view></router-view>
+      <!--<spinner></spinner>-->
     </div>
   </div>
 </template>
 
 <script>
 import menuRender from "./components/menuRender.vue";
-
+//import spinner from "./components/spinner.vue";
 
 export default {
   components: {
     "menu-render": menuRender,
+    //spinner: spinner,
   },
 };
 </script>
