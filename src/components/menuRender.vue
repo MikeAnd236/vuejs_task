@@ -1,5 +1,5 @@
 <template>
-  <div id="menu-render">
+  <div class="menu-render">
     <p>Trailer</p>
     <ul v-for="trailer in trailers" :key="trailer.id">
       <li>
@@ -49,7 +49,7 @@ export default {
 </script>
 
 <style lang="scss">
-#menu-render {
+.menu-render {
   box-sizing: border-box;
   min-width: 200px;
   display: flex;

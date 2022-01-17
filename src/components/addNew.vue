@@ -1,7 +1,7 @@
 <template>
 <div>
   <spinner class="spinner" v-if="load"></spinner>
-  <div id="add-new" v-if="!load">
+  <div class="add-new" v-if="!load">
     <form v-if="submitted" @submit="post">
       <h3>Add a New Item</h3>
       <label>Trailer No.:</label>
@@ -38,7 +38,6 @@
         v-model="data.attachedVehicle"
         placeholder="search"
         @keyup="inputChanged"
-        @keydown.down="onArrowDown"
         pattern="[A-Z0-9]+"
         title="Please enter Captitalize letter"
         required
@@ -200,7 +199,7 @@ div {
   font-size: 10px;
   font-family: "Poppins", sans-serif;
 }
-#add {
+.add {
   background-color: rgb(12, 119, 185);
   color: rgb(255, 255, 255);
   border: 1px solid rgb(12, 119, 185);
@@ -208,7 +207,7 @@ div {
   border-radius: 3px;
   padding: 5px 15px;
 }
-#add:hover {
+.add:hover {
   background-color: orange;
 }
 a {

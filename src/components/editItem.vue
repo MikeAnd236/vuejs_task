@@ -38,7 +38,6 @@
           v-model="data.attachedVehicle"
           placeholder="search"
           @keyup="inputChanged"
-          @keydown.down="onArrowDown"
           pattern="[A-Z0-9]+"
           title="Please enter Captitalize letter"
           required
@@ -152,6 +151,7 @@ export default {
           this.load = false;
         });
     },
+    
     setResult(value) {
       this.data.attachedVehicle = value;
       this.isOpen = false;

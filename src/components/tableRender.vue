@@ -1,14 +1,14 @@
 <template>
-  <div id="table-content">
+  <div class="table-content">
     <spinner class="spinner" v-if="load"></spinner>
-    <div id="table-render" v-if="!load">
-      <div >
-        <app-header></app-header>
+    <div class="table-render" v-if="!load">
+      <div>
+        <app-header />
       </div>
       <table>
         <thead>
           <tr>
-            <th id="action">Action</th>
+            <th class="action">Action</th>
             <th>Trailer No.</th>
             <th>Company</th>
             <th>Status</th>
@@ -19,7 +19,7 @@
         </thead>
         <tbody>
           <tr v-for="(item, index) in data" :key="item.id">
-            <td id="icon">
+            <td class="icon">
               <button>
                 <router-link v-bind:to="'/edit/' + item.id" exact>
                   <span v-html="item.action[0]"></span>
@@ -113,11 +113,11 @@ export default {
 </script>
 
 <style lang="scss">
-#table-content{
+.table-content {
   display: flex;
   flex-direction: column;
 }
-#table-render {
+.table-render {
   box-sizing: border-box;
   margin-top: -10px;
   display: flex;
@@ -149,13 +149,13 @@ table {
     }
   }
 }
-#action {
+.action {
   text-align: center;
 }
-#icon {
+.icon {
   text-align: center;
 }
-#header {
+.header {
   margin-top: -10px;
   margin-bottom: 20px;
 }

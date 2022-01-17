@@ -9,7 +9,7 @@
 
     <menu-render></menu-render>
 
-    <div id="render">
+    <div class="render">
       <h2>Trailer Management</h2>
       <router-view></router-view>
       <!--<spinner></spinner>-->
@@ -38,7 +38,7 @@ export default {
   justify-content: space-evenly;
   font-family: "Poppins", sans-serif;
 }
-#render {
+.render {
   display: flex;
   flex-direction: column;
   border: 0.5px solid #cecece;

@@ -13,8 +13,5 @@ return {
 }
 </script>
 <style scoped>
-.spin{
-    width: 10px;
-    height: 10px;
-}
+
 </style>

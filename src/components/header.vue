@@ -1,8 +1,8 @@
 <template>
   <div>
-    <button id="header">
-      <router-link to="/add">ADD</router-link>
-    </button>
+    <router-link to="/add">
+      <button class="header">ADD</button>
+    </router-link>
   </div>
 </template>
 
@@ -10,11 +10,13 @@
 export default {};
 </script>
 
-<style lang="scss">
-#header {
-    margin-left: 10px;
+<style lang="scss"> 
+//TODO change id to class
+.header {
+  margin-left: 10px;
+  color: white;
 }
-#header:hover {
-    background-color: orange;
+.header:hover {
+  background-color: orange;
 }
 </style>
