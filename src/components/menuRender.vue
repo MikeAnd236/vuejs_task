@@ -23,27 +23,16 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from "vuex";
 export default {
-  data() {
-    return {
-      trailers: [],
-      damages: [],
-    };
-  },
-  methods: {},
+  computed: mapGetters(["trailers", "damages"]),
   created() {
-    this.$http
-      .get("https://61d3f493b4c10c001712bb63.mockapi.io/trailer")
-      .then(function (data) {
-        console.log(data);
-        this.trailers = data.body;
-      });
-    this.$http
-      .get("https://61d3f493b4c10c001712bb63.mockapi.io/damage")
-      .then(function (data) {
-        console.log(data);
-        this.damages = data.body;
-      });
+    this.getTrailers();
+    this.getDamages();
+  },
+  methods: {
+    ...mapActions(["getTrailers", "getDamages"]),
+    ...mapMutations(["SET_TRAILERS", "SET_DAMAGES"]),
   },
 };
 </script>

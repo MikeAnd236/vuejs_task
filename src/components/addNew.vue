@@ -137,14 +137,7 @@ export default {
       }
       return "CDAS-" + result;
     },
-    /*autoComplete: function () {
-      this.$http
-        .get("https://61d3f493b4c10c001712bb63.mockapi.io/licenses")
-        .then(function (data) {
-          this.results = data.body;
-          console.log(this.results);
-        });
-    },*/
+
     setResult(value) {
       this.data.attachedVehicle = value;
       this.isOpen = false;

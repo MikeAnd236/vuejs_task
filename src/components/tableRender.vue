@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in data" :key="item.id">
+          <tr v-for="item in data" :key="item.id">
             <td class="icon">
               <button>
                 <router-link v-bind:to="'/edit/' + item.id" exact>
@@ -26,7 +26,7 @@
                 </router-link>
               </button>
 
-              <button @click="deleteItem(index)">
+              <button @click="deleteData(item.id)">
                 <span v-html="item.action[1]"></span>
               </button>
             </td>
@@ -56,58 +56,22 @@
 <script>
 import header from "./header.vue";
 import spinner from "./spinner.vue";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
-  data() {
-    return {
-      data: [],
-      load: false,
-    };
-  },
+  computed: mapGetters(["data", "load"]),
+
   components: {
     "app-header": header,
     spinner: spinner,
   },
-
   mounted() {
     this.syncData();
   },
 
   methods: {
-    deleteItem(index) {
-      this.$http
-        .get("https://61d3f493b4c10c001712bb63.mockapi.io/data")
-        .then(function (data) {
-          let id = data.body[index]["id"];
-          this.$http
-            .delete("https://61d3f493b4c10c001712bb63.mockapi.io/data/" + id, {
-              before: () => {
-                this.load = true;
-              },
-            })
-            .then(function (data) {
-              console.log("data:" + data, "id:" + id);
-              this.data.splice(id, 1);
-              this.syncData();
-              this.load = false;
-            });
-        })
-        .catch(function (e) {
-          alert("Error Message:" + e);
-        });
-    },
-
-    syncData() {
-      console.log("loading...");
-      this.$http
-        .get("https://61d3f493b4c10c001712bb63.mockapi.io/data")
-        .then(function (data) {
-          console.log("update data: ", data);
-          this.data = data.body;
-          //console.log("loadedddd...........");
-        })
-        .catch((err) => console.log(err));
-    },
+    ...mapActions(["syncData", "deleteData"]),
+    ...mapMutations(["SET_DATA", "DELETE_DATA"]),
   },
 };
 </script>

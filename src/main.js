@@ -4,6 +4,7 @@ import VueResource from "vue-resource";
 import VueRouter from "vue-router";
 import Routes from "./router/routes";
 import VueSpinners from "vue-spinners"
+import store from "./store/index"
 
 Vue.use(VueSpinners)
 
@@ -25,4 +26,5 @@ const router = new VueRouter({
 new Vue({
   render: (h) => h(App),
   router: router,
+  store: store
 }).$mount("#app");
