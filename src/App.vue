@@ -19,12 +19,10 @@
 
 <script>
 import menuRender from "./components/menuRender.vue";
-//import spinner from "./components/spinner.vue";
 
 export default {
   components: {
     "menu-render": menuRender,
-    //spinner: spinner,
   },
 };
 </script>
@@ -32,11 +30,22 @@ export default {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200&family=Titillium+Web:wght@200&display=swap");
 
+@media screen and (max-width: 800px) {
+  body {
+    background: #e7e7e7;
+  }
+  .menu-render {
+    display: none;
+  }
+}
+
 #app {
   box-sizing: border-box;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   font-family: "Poppins", sans-serif;
+  overflow: hidden;
+  text-overflow: clip;
 }
 .render {
   display: flex;
@@ -44,8 +53,11 @@ export default {
   border: 0.5px solid #cecece;
   box-shadow: 2px 2px 2px #888888;
   margin-right: -100px;
-  margin-left: -100px;
+  margin-left: -150px;
   width: 900px;
+  position: relative;
+  z-index: 1;
+  background: white;
 }
 h2 {
   background-color: rgb(12, 119, 185);
@@ -53,7 +65,7 @@ h2 {
   color: white;
   padding-top: 5px;
   padding-bottom: 5px;
-  margin-top: -20px;
+  margin-top: -10px;
   margin-left: -80px;
   margin-right: -60px;
   font-size: 18px;

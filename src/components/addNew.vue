@@ -1,70 +1,72 @@
 <template>
-<div>
-  <spinner class="spinner" v-if="load"></spinner>
-  <div class="add-new" v-if="!load">
-    <form v-if="submitted" @submit="post">
-      <h3>Add a New Item</h3>
-      <label>Trailer No.:</label>
-      <input type="text" v-model="data.trailerNo" readonly />
-      <label>Company:</label>
-      <input
-        type="text"
-        v-model="data.company"
-        :maxlength="100"
-        minlength="10"
-        pattern="[a-zA-Z0-9\s]+"
-        title="Cannot contain specific letter"
-        required
-      />
-      <label>Status</label>
-      <select v-model="data.status" required>
-        <option v-for="state in status" :key="state.id">{{ state }}</option>
-      </select>
-      <label>Location:</label>
-      <input
-        type="text"
-        v-model="data.location"
-        pattern="[a-zA-Z0-9\s]+"
-        title="Cannot contain specific letter"
-        required
-      />
-      <label>Job</label>
-      <select v-model="data.job" required>
-        <option v-for="jo in job" :key="jo.id">{{ jo }}</option>
-      </select>
-      <label>Attached Vehicle:</label>
-      <input
-        type="text"
-        v-model="data.attachedVehicle"
-        placeholder="search"
-        @keyup="inputChanged"
-        pattern="[A-Z0-9]+"
-        title="Please enter Captitalize letter"
-        required
-      />
-      <ul v-for="user in filteredUser" :key="user.id" v-show="isOpen">
-        <li @click="setResult(user.value)">{{ user.value }}</li>
-      </ul>
-      <input class="click" type="submit" value="Add" />
+  <div>
+    <spinner class="spinner" v-if="!isLoading"></spinner>
+    <div class="add-new" v-if="isLoading">
+      <form v-if="submitted" @submit="addNew">
+        <h3>Add a New Item</h3>
+        <label>Trailer No.:</label>
+        <input type="text" v-model="data.trailerNo" readonly />
+        <label>Company:</label>
+        <input
+          type="text"
+          v-model="data.company"
+          :maxlength="100"
+          minlength="10"
+          pattern="[a-zA-Z0-9\s]+"
+          title="Cannot contain specific letter"
+          required
+        />
+        <label>Status</label>
+        <select v-model="data.status" required>
+          <option v-for="state in status" :key="state.id">{{ state }}</option>
+        </select>
+        <label>Location:</label>
+        <input
+          type="text"
+          v-model="data.location"
+          pattern="[a-zA-Z0-9\s]+"
+          title="Cannot contain specific letter"
+          required
+        />
+        <label>Job</label>
+        <select v-model="data.job" required>
+          <option v-for="jo in job" :key="jo.id">{{ jo }}</option>
+        </select>
+        <label>Attached Vehicle:</label>
+        <input
+          type="text"
+          v-model="data.attachedVehicle"
+          placeholder="search"
+          @keyup="inputChanged"
+          pattern="[A-Z0-9]+"
+          title="Please enter Captitalize letter"
+          required
+        />
+        <ul v-for="user in filteredUser" :key="user.id" v-show="isOpen">
+          <li @click="setResult(user.value)">{{ user.value }}</li>
+        </ul>
+        <input class="click" type="submit" value="Add" />
 
-      <button class="click">
-        <router-link to="/">Cancel</router-link>
-      </button>
-    </form>
+        <button class="click">
+          <router-link to="/">Cancel</router-link>
+        </button>
+      </form>
+    </div>
   </div>
-</div>
-  
 </template>
 
 <script>
 import spinner from "./spinner.vue";
+import randomTrailer from "../helper/randomTrailer";
+import { mapActions, mapState } from "vuex";
+const LENGHT_OF_TRAILER = 6;
 export default {
   data() {
     return {
       submitted: true,
       data: {
         action: ["<i class='fas fa-pen'></i>", "<i class='fas fa-trash'></i>"],
-        trailerNo: this.randomTrailer(6),
+        trailerNo: randomTrailer(LENGHT_OF_TRAILER),
         company: "",
         location: "",
         attachedVehicle: "",
@@ -121,23 +123,10 @@ export default {
       ],
       isOpen: false,
       filteredUser: [],
-      load: false,
     };
   },
-
+  computed: mapState(["loading"]),
   methods: {
-    randomTrailer: function (length) {
-      var result = "";
-      var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      var charactersLength = characters.length;
-      for (var i = 0; i < length; i++) {
-        result += characters.charAt(
-          Math.floor(Math.random() * charactersLength)
-        );
-      }
-      return "CDAS-" + result;
-    },
-
     setResult(value) {
       this.data.attachedVehicle = value;
       this.isOpen = false;
@@ -155,29 +144,14 @@ export default {
         return this.filteredUser;
       }
     },
-    post: function () {
-      this.$http
-        .post("https://61d3f493b4c10c001712bb63.mockapi.io/data", this.data, {
-          before: () => {
-            this.load = true;
-          },
-        })
-        .then(function (data) {
-          console.log(data);
-          this.submitted = true;
-          this.load = false;
-          this.$router.push({ path: "/" }).catch((error) => {
-            if (
-              error.name !== "NavigationDuplicated" &&
-              !error.message.includes(
-                "Avoided redundant navigation to current location"
-              )
-            ) {
-              console.log(error);
-            }
-          });
-        });
+    async addNew() {
+      //this.$store.commit("isLoading", true)
+      await this.$store.dispatch("addNew", this.data);
+      //this.$store.commit("isLoading", false)
+      this.$router.push({ path: "/" });
+
     },
+    ...mapActions(["isLoading"]),
   },
   components: {
     spinner: spinner,
@@ -186,7 +160,7 @@ export default {
 </script>
 
 <style lang="scss">
-div {
+div{
   display: flex;
   margin-top: 10px;
   font-size: 10px;
@@ -216,6 +190,7 @@ form {
   flex-direction: column;
   width: 300px;
   padding: 20px;
+  justify-content: center;
 }
 button {
   background-color: rgb(12, 119, 185);
@@ -244,7 +219,7 @@ label {
 li {
   font-size: 12px;
 }
-.spinner{
+.spinner {
   margin-left: 425px;
 }
 </style>

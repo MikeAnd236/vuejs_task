@@ -1,7 +1,7 @@
 <template>
   <div class="table-content">
-    <spinner class="spinner" v-if="load"></spinner>
-    <div class="table-render" v-if="!load">
+    <spinner class="spinner" v-if="loading"></spinner>
+    <div class="table-render" v-if="!loading">
       <div>
         <app-header />
       </div>
@@ -56,10 +56,10 @@
 <script>
 import header from "./header.vue";
 import spinner from "./spinner.vue";
-import { mapGetters, mapActions, mapMutations } from "vuex";
+import { mapGetters, mapActions, mapMutations, mapState } from "vuex";
 
 export default {
-  computed: mapGetters(["data", "load"]),
+  computed: { ...mapGetters(["data"]), ...mapState(["loading"]) },
 
   components: {
     "app-header": header,
@@ -71,7 +71,7 @@ export default {
 
   methods: {
     ...mapActions(["syncData", "deleteData"]),
-    ...mapMutations(["SET_DATA", "DELETE_DATA"]),
+    ...mapMutations(["SET_DATA", "DELETE_DATA", "isLoading"]),
   },
 };
 </script>

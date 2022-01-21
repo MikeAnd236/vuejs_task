@@ -1,123 +1,17 @@
-import axios from "axios";
+import Api from "@/service/api";
 
 const tableRender = {
   state: {
-    load: false,
-    data: {
-      action: ["<i class='fas fa-pen'></i>", "<i class='fas fa-trash'></i>"],
-      trailerNo: '',
-      company: "",
-      location: "",
-      attachedVehicle: "",
-    },
-    status: [
-      "Allocation",
-      "Unallocation",
-      "Under repair",
-      "Not for Allocation",
-      "Not Servicable",
-    ],
-    job: ["soldier", "driver", "doctor", "teacher"],
-    users: [
-      {
-        id: "l1",
-        value: "AB024",
-      },
-      {
-        id: "l2",
-        value: "QT163",
-      },
-      {
-        id: "l3",
-        value: "GV220",
-      },
-      {
-        id: "l4",
-        value: "TH120",
-      },
-      {
-        id: "l5",
-        value: "KM089",
-      },
-      {
-        id: "l6",
-        value: "DR058",
-      },
-      {
-        id: "l7",
-        value: "GV110",
-      },
-      {
-        id: "l8",
-        value: "DW098",
-      },
-      {
-        id: "l9",
-        value: "AC148",
-      },
-      {
-        id: "l10",
-        value: "GR233",
-      },
-    ],
-    isOpen: false,
-    filteredUser: [],
+    data: [],
+    loading: false,
+    error: null,
   },
-  getters: { data: (state) => state.data, load: (state) => state.load },
+  getters: {
+    data: (state) => state.data,
+  },
 
   //getters: //
-  actions: {
-    async syncData({ commit }) {
-      try {
-        const response = await axios.get(
-          "https://61d3f493b4c10c001712bb63.mockapi.io/data"
-        );
-        commit("SET_DATA", response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async deleteData({ commit }, dataId) {
-      try {
-        await axios.delete(
-          `https://61d3f493b4c10c001712bb63.mockapi.io/data/${dataId}`,
-          {
-            before: () => {
-              this.load = true;
-            },
-          }
-        );
-        this.load = false;
-      } catch (error) {
-        console.log(error);
-      }
-      commit("DELETE_DATA", dataId);
-    },
-    async addNew({ commit }, newData) {
-      try {
-        await axios.post(
-          "https://61d3f493b4c10c001712bb63.mockapi.io/data",
-          newData
-        );
-      } catch (error) {
-        console.log(error);
-      }
-      commit("ADD_NEW", newData);
-    },
-    randomTrailer({commit},length) {
-      var result = "";
-      var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      var charactersLength = characters.length;
-      for (var i = 0; i < length; i++) {
-        result += characters.charAt(
-          Math.floor(Math.random() * charactersLength)
-        );
-        return result = "CDAS-" + result;
-      }
-      
-      commit('RANDOM_TRAILER', result)
-    },
-  },
+
   mutations: {
     SET_DATA(state, data) {
       state.data = data;
@@ -127,12 +21,77 @@ const tableRender = {
       state.data = data;
     },
     ADD_NEW(state, newData) {
-      state.data.push(newData);
-      this.$router.push({ path: "/" });
+      let data = state.data.concat(newData);
+      state.data = data;
     },
-    RANDOM_TRAILER(state, result){
-      state.result = result;
+    isLoading(state, loading){
+      if(loading){
+        state.loading = true
+      } else {
+        state.loading = false
+      }
     }
+  },
+  actions: {
+    async syncData({ commit }) {
+      //this.loading = true;
+      commit("isLoading", true)
+      try {
+        const response = await Api().get(
+          "/data" /*, {
+          before: () => {
+            this.loading = true;
+          },
+        }*/
+        );
+        commit("SET_DATA", response.data);
+        commit("isLoading", false)
+        //this.loading = false;
+        // if respose error => commit error ||
+      } catch (error) {
+        console.log(error);
+        throw error;
+        // commit error
+      } finally {
+       //this.loading = false;
+       commit("isLoading", false)
+      }
+    },
+    async deleteData({ commit }, dataId) {
+      commit("isLoading", true)
+      try {
+        await Api().delete(
+          `/data/${dataId}` /*{
+          before: () => {
+            this.loading = true;
+          },
+        }*/
+        );
+        commit("DELETE_DATA", dataId);
+        commit("isLoading", false)
+        // throw { error };
+      } catch (error) {
+        console.log(error);
+        throw error;
+      } finally {
+        commit("isLoading", false)
+      }
+    },
+
+    async addNew({ commit }, newData) {
+      commit("isLoading", true)
+      try {
+        await Api().post("/data", newData);
+        commit("ADD_NEW", newData);
+        // throw { error };
+        commit("isLoading", false)
+      } catch (error) {
+        console.log(error);
+        throw error;
+      } finally {
+        commit("isLoading", false)
+      }
+    },
   },
 };
 export default tableRender;

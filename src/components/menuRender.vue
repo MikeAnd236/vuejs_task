@@ -40,20 +40,21 @@ export default {
 <style lang="scss">
 .menu-render {
   box-sizing: border-box;
-  min-width: 200px;
+  max-width: 200px;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  margin-left: -150px;
+  margin-left: -100px;
   line-height: 0.2;
   font-size: 12px;
+  position: relative;
+  z-index: 0.3;
 }
 ul {
   list-style-type: none;
   li {
     margin-left: -40px;
     margin-top: -10px;
-
     i {
       width: 18px;
       height: 18px;

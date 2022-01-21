@@ -1,11 +1,11 @@
 <template>
   <div>
-    <spinner class="spinner" v-if="load"></spinner>
-    <div v-if="!load">
+    <spinner class="spinner" v-if="loading"></spinner>
+    <div v-if="!loading">
       <form @submit="editItem">
         <h3>Edit Item</h3>
         <label>Trailer No.:</label>
-        <input type="text" v-model="data.trailerNo" readonly/>
+        <input type="text" v-model="data.trailerNo" readonly />
         <label>Company:</label>
         <input
           type="text"
@@ -19,6 +19,7 @@
         <label>Status</label>
         <select v-model="data.status" required>
           <option v-for="state in status" :key="state.id">{{ state }}</option>
+          s
         </select>
         <label>Location:</label>
         <input
@@ -55,7 +56,10 @@
 </template>
 
 <script>
+//import { mapGetters } from "vuex";
 import spinner from "./spinner.vue";
+import Api from "@/service/api";
+
 export default {
   data() {
     return {
@@ -74,7 +78,7 @@ export default {
         "Not Servicable",
       ],
       job: ["soldier", "driver", "doctor", "teacher"],
-       users: [
+      users: [
         {
           id: "l1",
           value: "AB024",
@@ -116,42 +120,25 @@ export default {
           value: "GR233",
         },
       ],
+      loading: false,
       isOpen: false,
       id: this.$route.params.id,
-      load: false,
+      filteredUser: [],
     };
   },
-  mounted() {
-    this.$http
-      .get("https://61d3f493b4c10c001712bb63.mockapi.io/data/" + this.id)
-      .then(function (data) {
-        this.data = data.body;
-      });
+  async mounted() {
+    const response = await Api().get(`/data/${this.id}`);
+    this.data = response.data;
   },
+  //computed: mapGetters(["loading"]),
   methods: {
-    editItem(event) {
+    async editItem(event) {
       event.preventDefault();
-      const payload = this.data;
-
-      console.log("payload...: ", payload);
-
-      this.$http
-        .put(
-          "https://61d3f493b4c10c001712bb63.mockapi.io/data/" + this.id,
-          payload,
-          {
-            before: () => {
-              this.load = true;
-            },
-          }
-        )
-        .then(function (data) {
-          console.log(data);
-          this.$router.push("/");
-          this.load = false;
-        });
+      this.loading = true;
+      await Api().put(`/data/${this.id}`, this.data);
+      this.loading = false;
+      this.$router.push("/");
     },
-    
     setResult(value) {
       this.data.attachedVehicle = value;
       this.isOpen = false;
