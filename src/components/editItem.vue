@@ -39,8 +39,8 @@
           v-model="data.attachedVehicle"
           placeholder="search"
           @keyup="inputChanged"
-          pattern="[A-Z0-9]+"
-          title="Please enter Captitalize letter"
+          pattern="[a-zA-Z0-9\s]+"
+          title="Cannot contain specific letter"
           required
         />
         <ul v-for="user in filteredUser" :key="user.id" v-show="isOpen">
@@ -78,48 +78,7 @@ export default {
         "Not Servicable",
       ],
       job: ["soldier", "driver", "doctor", "teacher"],
-      users: [
-        {
-          id: "l1",
-          value: "AB024",
-        },
-        {
-          id: "l2",
-          value: "QT163",
-        },
-        {
-          id: "l3",
-          value: "GV220",
-        },
-        {
-          id: "l4",
-          value: "TH120",
-        },
-        {
-          id: "l5",
-          value: "KM089",
-        },
-        {
-          id: "l6",
-          value: "DR058",
-        },
-        {
-          id: "l7",
-          value: "GV110",
-        },
-        {
-          id: "l8",
-          value: "DW098",
-        },
-        {
-          id: "l9",
-          value: "AC148",
-        },
-        {
-          id: "l10",
-          value: "GR233",
-        },
-      ],
+      users: [],
       loading: false,
       isOpen: false,
       id: this.$route.params.id,
@@ -143,12 +102,14 @@ export default {
       this.data.attachedVehicle = value;
       this.isOpen = false;
     },
-    inputChanged() {
+    async inputChanged() {
       if (this.data.attachedVehicle === "") {
         this.isOpen = false;
       } else {
+        const response = await Api().get("/users");
+        this.users = response.data;
         let filtered = this.users.filter((user) => {
-          return user.value.match(this.data.attachedVehicle);
+          return user.value.match(this.data.attachedVehicle.toUpperCase());
         });
         this.filteredUser = [];
         this.isOpen = true;

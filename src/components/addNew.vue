@@ -2,7 +2,7 @@
   <div>
     <spinner class="spinner" v-if="!isLoading"></spinner>
     <div class="add-new" v-if="isLoading">
-      <form v-if="submitted" @submit="addNew">
+      <form @submit="addNew">
         <h3>Add a New Item</h3>
         <label>Trailer No.:</label>
         <input type="text" v-model="data.trailerNo" readonly />
@@ -38,8 +38,8 @@
           v-model="data.attachedVehicle"
           placeholder="search"
           @keyup="inputChanged"
-          pattern="[A-Z0-9]+"
-          title="Please enter Captitalize letter"
+          pattern="[a-zA-Z0-9\s]+"
+          title="Cannot contain specific letter"
           required
         />
         <ul v-for="user in filteredUser" :key="user.id" v-show="isOpen">
@@ -59,11 +59,13 @@
 import spinner from "./spinner.vue";
 import randomTrailer from "../helper/randomTrailer";
 import { mapActions, mapState } from "vuex";
+import Api from "@/service/api";
+
 const LENGHT_OF_TRAILER = 6;
+
 export default {
   data() {
     return {
-      submitted: true,
       data: {
         action: ["<i class='fas fa-pen'></i>", "<i class='fas fa-trash'></i>"],
         trailerNo: randomTrailer(LENGHT_OF_TRAILER),
@@ -79,48 +81,7 @@ export default {
         "Not Servicable",
       ],
       job: ["soldier", "driver", "doctor", "teacher"],
-      users: [
-        {
-          id: "l1",
-          value: "AB024",
-        },
-        {
-          id: "l2",
-          value: "QT163",
-        },
-        {
-          id: "l3",
-          value: "GV220",
-        },
-        {
-          id: "l4",
-          value: "TH120",
-        },
-        {
-          id: "l5",
-          value: "KM089",
-        },
-        {
-          id: "l6",
-          value: "DR058",
-        },
-        {
-          id: "l7",
-          value: "GV110",
-        },
-        {
-          id: "l8",
-          value: "DW098",
-        },
-        {
-          id: "l9",
-          value: "AC148",
-        },
-        {
-          id: "l10",
-          value: "GR233",
-        },
-      ],
+      users: [],
       isOpen: false,
       filteredUser: [],
     };
@@ -131,12 +92,14 @@ export default {
       this.data.attachedVehicle = value;
       this.isOpen = false;
     },
-    inputChanged() {
+    async inputChanged() {
       if (this.data.attachedVehicle === "") {
         this.isOpen = false;
       } else {
+        const response = await Api().get("/users");
+        this.users = response.data;
         let filtered = this.users.filter((user) => {
-          return user.value.match(this.data.attachedVehicle);
+          return user.value.match(this.data.attachedVehicle.toUpperCase());
         });
         this.filteredUser = [];
         this.isOpen = true;
@@ -145,11 +108,8 @@ export default {
       }
     },
     async addNew() {
-      //this.$store.commit("isLoading", true)
       await this.$store.dispatch("addNew", this.data);
-      //this.$store.commit("isLoading", false)
       this.$router.push({ path: "/" });
-
     },
     ...mapActions(["isLoading"]),
   },
@@ -160,7 +120,7 @@ export default {
 </script>
 
 <style lang="scss">
-div{
+div {
   display: flex;
   margin-top: 10px;
   font-size: 10px;
@@ -175,7 +135,7 @@ div{
   padding: 5px 15px;
 }
 .add:hover {
-  background-color: orange;
+  background-color: tomato;
 }
 a {
   text-decoration: none;
@@ -192,10 +152,6 @@ form {
   padding: 20px;
   justify-content: center;
 }
-button {
-  background-color: rgb(12, 119, 185);
-  border-radius: 3px;
-}
 .click {
   color: white;
   font-size: 12px;
@@ -205,9 +161,10 @@ button {
   cursor: pointer;
   background-color: rgb(12, 119, 185);
   border-radius: 3px;
+  font-family: "Poppins", sans-serif;
 }
 .click:hover {
-  background-color: orange;
+  background-color: tomato;
 }
 
 h3 {

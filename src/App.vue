@@ -8,11 +8,11 @@
     />
 
     <menu-render></menu-render>
-
-    <div class="render">
-      <h2>Trailer Management</h2>
-      <router-view></router-view>
-      <!--<spinner></spinner>-->
+    <div class="render-total">
+      <nav><h2>Trailer Management</h2></nav>
+      <div class="render">
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -47,27 +47,32 @@ export default {
   overflow: hidden;
   text-overflow: clip;
 }
+.render-total {
+  display: flex;
+  flex-direction: column;
+}
 .render {
   display: flex;
   flex-direction: column;
   border: 0.5px solid #cecece;
   box-shadow: 2px 2px 2px #888888;
   margin-right: -100px;
-  margin-left: -150px;
+  margin-left: -180px;
   width: 900px;
   position: relative;
   z-index: 1;
   background: white;
 }
-h2 {
-  background-color: rgb(12, 119, 185);
-  padding-left: 60px;
-  color: white;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  margin-top: -10px;
-  margin-left: -80px;
-  margin-right: -60px;
-  font-size: 18px;
+nav {
+  h2 {
+    background-color: rgb(12, 119, 185);
+    padding-left: 60px;
+    color: white;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin: -10px -130px 0 -250px;
+    font-size: 18px;
+    z-index: 2;
+  }
 }
 </style>

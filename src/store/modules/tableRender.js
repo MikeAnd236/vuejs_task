@@ -1,17 +1,17 @@
 import Api from "@/service/api";
 
+const perPageOptions = [5, 7, 10];
 const tableRender = {
   state: {
     data: [],
     loading: false,
     error: null,
+    pagination: { page: 1, perPage: perPageOptions[0] },
+    perPageOptions,
   },
   getters: {
     data: (state) => state.data,
   },
-
-  //getters: //
-
   mutations: {
     SET_DATA(state, data) {
       state.data = data;
@@ -24,41 +24,41 @@ const tableRender = {
       let data = state.data.concat(newData);
       state.data = data;
     },
-    isLoading(state, loading){
-      if(loading){
-        state.loading = true
+    isLoading(state, loading) {
+      if (loading) {
+        state.loading = true;
       } else {
-        state.loading = false
+        state.loading = false;
       }
-    }
+    },
+    computedData() {
+      if (!this.data) return [];
+      else {
+        const firstIndex = (this.pagination.page - 1) * this.pagination.perPage;
+        const lastIndex = this.pagination.page * this.pagination.perPage;
+        return this.data.slice(firstIndex, lastIndex);
+      }
+    },
   },
   actions: {
     async syncData({ commit }) {
-      //this.loading = true;
-      commit("isLoading", true)
+      commit("isLoading", true);
       try {
-        const response = await Api().get(
-          "/data" /*, {
-          before: () => {
-            this.loading = true;
-          },
-        }*/
-        );
+        const response = await Api().get("/data");
         commit("SET_DATA", response.data);
-        commit("isLoading", false)
-        //this.loading = false;
         // if respose error => commit error ||
       } catch (error) {
         console.log(error);
+        commit("isLoading", false);
         throw error;
         // commit error
       } finally {
-       //this.loading = false;
-       commit("isLoading", false)
+        //this.loading = false;
+        commit("isLoading", false);
       }
     },
     async deleteData({ commit }, dataId) {
-      commit("isLoading", true)
+      commit("isLoading", true);
       try {
         await Api().delete(
           `/data/${dataId}` /*{
@@ -68,28 +68,35 @@ const tableRender = {
         }*/
         );
         commit("DELETE_DATA", dataId);
-        commit("isLoading", false)
         // throw { error };
       } catch (error) {
         console.log(error);
+        commit("isLoading", false);
         throw error;
       } finally {
-        commit("isLoading", false)
+        commit("isLoading", false);
       }
     },
-
     async addNew({ commit }, newData) {
-      commit("isLoading", true)
+      commit("isLoading", true);
       try {
         await Api().post("/data", newData);
         commit("ADD_NEW", newData);
+        if (!this.data) return [];
+        else {
+          const firstIndex =
+            (this.pagination.page - 1) * this.pagination.perPage;
+          const lastIndex = this.pagination.page * this.pagination.perPage;
+          return this.data.slice(firstIndex, lastIndex);
+        }
+
         // throw { error };
-        commit("isLoading", false)
       } catch (error) {
         console.log(error);
+        commit("isLoading", false);
         throw error;
       } finally {
-        commit("isLoading", false)
+        commit("isLoading", false);
       }
     },
   },

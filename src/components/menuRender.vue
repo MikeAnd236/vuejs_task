@@ -3,20 +3,22 @@
     <p>Trailer</p>
     <ul v-for="trailer in trailers" :key="trailer.id">
       <li>
-        <span class="menu-icon" v-html="trailer.icon"></span> {{ trailer.name }}
+        <span class="menu-icon" v-html="trailer.icon"></span>
+        <a href="#"> {{ trailer.name }} </a>
       </li>
     </ul>
     <p>Damage</p>
     <ul v-for="damage in damages" :key="damage.id">
       <li>
-        <span class="menu-icon" v-html="damage.icon"></span> {{ damage.name }}
+        <span class="menu-icon" v-html="damage.icon"></span>
+        <a href="#"> {{ damage.name }} </a>
       </li>
     </ul>
     <p>Administration</p>
     <ul>
       <li>
-        <i id="menu-icon" class="fas fa-draw-polygon fa-lg"></i> Zoning
-        Management
+        <i id="menu-icon" class="fas fa-draw-polygon fa-lg"></i>
+        <a>Zoning Management</a>
       </li>
     </ul>
   </div>
@@ -69,5 +71,12 @@ ul {
 }
 p {
   margin-bottom: 30px;
+}
+li a {
+  color: black;
+  cursor: pointer;
+}
+li a:hover {
+  color: tomato;
 }
 </style>

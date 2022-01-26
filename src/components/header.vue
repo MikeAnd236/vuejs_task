@@ -10,13 +10,14 @@
 export default {};
 </script>
 
-<style lang="scss"> 
+<style lang="scss">
 //TODO change id to class
 .header {
   margin-left: 10px;
   color: white;
+  cursor: pointer;
 }
 .header:hover {
-  background-color: orange;
+  background-color: tomato;
 }
 </style>
