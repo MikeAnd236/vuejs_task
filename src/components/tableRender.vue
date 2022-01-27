@@ -35,8 +35,16 @@
       <div>
         <app-header />
       </div>
+      <div class="no-match">
+        <p v-if="!computedData.length" class="no-item" v-show="search">
+          No matched results "{{ search }}"
+        </p>
+        <p v-if="!computedData.length" class="no-item" v-show="searchUsers">
+          No matched results "{{ searchUsers }}"
+        </p>
+      </div>
       <table>
-        <thead>
+        <thead v-if="computedData.length">
           <tr>
             <th class="action">Action</th>
             <th v-for="con in config" :key="con.key">{{ con.value }}</th>
@@ -252,5 +260,10 @@ button {
 }
 select option:first-child {
   color: gray;
+}
+.no-match {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
 }
 </style>

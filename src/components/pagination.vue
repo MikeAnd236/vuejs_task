@@ -10,13 +10,15 @@
       </span>
       <span class="showing">
         Showing:
-        <span
-          class="showing-item"
-          v-for="(amount, index) in perPageOptions"
-          :key="index"
-          @click="setPerPage(amount)"
-          >{{ amount }}
-        </span>
+        <b>
+          <span
+            class="showing-item"
+            v-for="(amount, index) in perPageOptions"
+            :key="index"
+            @click="setPerPage(amount)"
+            >{{ amount }}
+          </span>
+        </b>
       </span>
     </p>
   </section>
