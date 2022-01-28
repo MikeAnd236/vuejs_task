@@ -47,7 +47,9 @@
         <thead v-if="computedData.length">
           <tr>
             <th class="action">Action</th>
-            <th v-for="con in config" :key="con.key">{{ con.value }}</th>
+            <th class="config" v-for="con in config" :key="con.key">
+              {{ con.value }} <i @click="sort(con.key)" class="fas fa-sort"></i>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -107,6 +109,8 @@ export default {
       searchUsers: "",
       pagination: { page: 1, perPage: perPageOptions[0] },
       perPageOptions,
+      currentSort: "name",
+      currentSortDir: "asc",
       status: [
         "Allocation",
         "Unallocation",
@@ -117,10 +121,10 @@ export default {
       job: ["soldier", "driver", "doctor", "teacher"],
       users: [],
       config: [
-        { key: "trailer", value: "Trailer No." },
+        { key: "trailerNo", value: "Trailer No." },
         { key: "company", value: "Company" },
         { key: "status", value: "Status" },
-        { key: "loaction", value: "Location" },
+        { key: "location", value: "Location" },
         { key: "job", value: "Job" },
         { key: "attachedVehicle", value: "Attached Vehicle" },
       ],
@@ -139,14 +143,22 @@ export default {
       }
     },
     filterTrailer: function () {
-      return this.data.filter((item) => {
-        return (
-          item.trailerNo.match(this.search.toUpperCase()) &&
-          item.status.match(this.searchStatus) &&
-          item.job.match(this.searchJob) &&
-          item.attachedVehicle.match(this.searchUsers.toUpperCase())
-        );
-      });
+      return this.data
+        .filter((item) => {
+          return (
+            item.trailerNo.match(this.search.toUpperCase()) &&
+            item.status.match(this.searchStatus) &&
+            item.job.match(this.searchJob) &&
+            item.attachedVehicle.match(this.searchUsers.toUpperCase())
+          );
+        })
+        .sort((a, b) => {
+          let modifier = 1;
+          if (this.currentSortDir === "desc") modifier = -1;
+          if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+          if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+          return 0;
+        });
     },
   },
 
@@ -162,6 +174,12 @@ export default {
   methods: {
     ...mapActions(["syncData", "deleteData"]),
     ...mapMutations(["SET_DATA", "DELETE_DATA", "isLoading"]),
+    sort: function (s) {
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      }
+      this.currentSort = s;
+    },
   },
 };
 </script>
@@ -266,4 +284,16 @@ select option:first-child {
   justify-content: center;
   font-size: 12px;
 }
+
+.fas.fa-sort {
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 3px;
+  width: 12px;
+  height: 12px;
+}
+.fas.fa-sort:hover{
+  color: tomato;
+}
+
 </style>
