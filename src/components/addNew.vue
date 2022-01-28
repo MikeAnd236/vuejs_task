@@ -107,8 +107,8 @@ export default {
         return this.filteredUser;
       }
     },
-    async addNew() {
-      await this.$store.dispatch("addNew", this.data);
+    addNew() {
+      this.$store.dispatch("addNew", this.data);
       this.$router.push({ path: "/" });
     },
     ...mapActions(["isLoading"]),
